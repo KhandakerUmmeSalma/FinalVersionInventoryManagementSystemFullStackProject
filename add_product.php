@@ -2,9 +2,6 @@
 session_start();
 include 'db.php';  // Include the database connection
 
-// Initialize an empty variable for message
-$alert_message = '';
-
 // Check if the user is logged in
 if (!isset($_SESSION['userid'])) {
     echo '<div class="alert alert-danger">You must be logged in to add a product.</div>';
@@ -25,15 +22,9 @@ if ($stmt->num_rows == 0) {
     $stmt->bind_param("i", $farmer_id);
     
     if ($stmt->execute()) {
-        $alert_message = '<div class="alert alert-info alert-dismissible fade show" role="alert">
-                            You have been successfully registered as a producer.
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                          </div>';
+        echo '<div class="alert alert-success">You have been successfully registered as a producer.</div>';
     } else {
-        $alert_message = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            Error: ' . htmlspecialchars($conn->error) . '
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                          </div>';
+        echo '<div class="alert alert-danger">Error: ' . htmlspecialchars($conn->error) . '</div>';
         exit();
     }
 }
@@ -53,15 +44,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param("ssdsdssi", $good_name, $good_type, $price_per_unit, $production_date, $shelf_time, $temperature_threshold, $batch_number, $farmer_id);
 
     if ($stmt->execute()) {
-        $alert_message = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            Product added successfully.
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                          </div>';
+        echo '<div class="alert alert-success">Product added successfully.</div>';
     } else {
-        $alert_message = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            Error: ' . htmlspecialchars($conn->error) . '
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                          </div>';
+        echo '<div class="alert alert-danger">Error: ' . htmlspecialchars($conn->error) . '</div>';
     }
 }
 ?>
@@ -115,13 +100,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h2>Welcome to Your Dashboard</h2>
         <hr>
 
-        <!-- Display alert messages -->
-        <?php if ($alert_message != '') echo $alert_message; ?>
-
         <!-- Add New Product Section -->
         <div id="addProduct" class="collapse show">
             <h3>Add New Product</h3>
-            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+            <form method="POST" action="add_product.php">
                 <div class="mb-3">
                     <label for="good_name" class="form-label">Product Name</label>
                     <input type="text" class="form-control" id="good_name" name="good_name" required>
@@ -133,6 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <option value="Vegetables">Vegetables</option>
                         <option value="Dairy">Dairy</option>
                         <option value="Meat">Meat</option>
+                        <!-- Add more types as needed -->
                     </select>
                 </div>
                 <div class="mb-3">
@@ -161,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <hr>
 
-        <!-- View Products Section (Initially collapsed) -->
+        <!-- View Products Section -->
         <div id="viewProducts" class="collapse">
             <h3>Your Products</h3>
             <?php

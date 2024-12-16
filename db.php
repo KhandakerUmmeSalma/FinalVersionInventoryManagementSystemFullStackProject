@@ -2,7 +2,7 @@
 // Database configuration
 $servername = "localhost";
 $username = "root";
-$password = ""; // Default password for XAMPP's MySQL is empty
+$password = "";
 $dbname = "inventoryofperishablegoodsdb";
 
 // Create connection
