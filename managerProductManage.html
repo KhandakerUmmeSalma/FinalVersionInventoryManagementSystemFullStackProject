@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manager Dashboard</title>
+  <script src="https://kit.fontawesome.com/a028686634.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <style type="text/css">
+    .card {
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1.5rem;
+      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+      border-radius: 10px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card img {
+      object-fit: cover;
+      height: 50%;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+      background-color: #f9f9f9;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    .navbar {
+      background-color: #B6F2D1;
+      padding: 1rem 2rem;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+
+    .row {
+      margin-top: 7rem;
+    }
+
+    .form-control {
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar fixed-top">
+    <div class="container-fluid">
+      <form class="d-flex align-items-center">
+        <i class="fa-solid fa-warehouse fa-2x me-2"></i>
+        <span class="h1 fw-bold mb-0">Manager Dashboard</span>
+      </form>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container" style="margin-top: 8rem;">
+    <h2 class="mt-4">Manage Products</h2>
+      <form id="add-product-form" class="mb-5">
+        <div class="row mt-0">
+          <div class="col-md-6">
+            <label for="product-name" class="form-label">Product Name</label>
+            <select id="product-name" class="form-control">
+              <option value="">Select a product</option>
+              <!-- Add options dynamically fetched from Farmer Table -->
+            </select>
+
+            <label for="product-pic" class="form-label">Product Picture</label>
+            <input type="file" id="product-pic" class="form-control">
+
+            <label for="product-id" class="form-label">Product ID</label>
+            <input type="text" id="product-id" class="form-control" placeholder="Auto-generated" disabled>
+
+            <label for="batch-number" class="form-label">Batch Number</label>
+            <input type="text" id="batch-number" class="form-control" placeholder="Fetched from Farmer Table" disabled>
+
+            <label for="shelf-life" class="form-label">Shelf Life (Dummy)</label>
+            <input type="text" id="shelf-life" class="form-control" placeholder="E.g., 10 days" disabled>
+          </div>
+
+          <div class="col-md-6">
+            <label for="opt-temp" class="form-label">Optimum Temperature Range (Dummy)</label>
+            <input type="text" id="opt-temp" class="form-control" placeholder="E.g., Min 0°C, Max 10°C" disabled>
+
+            <label for="opt-humidity" class="form-label">Optimum Humidity Range (Dummy)</label>
+            <input type="text" id="opt-humidity" class="form-control" placeholder="E.g., Min 30%, Max 50%" disabled>
+
+            <label for="entry-date" class="form-label">Date Entered Warehouse</label>
+            <input type="date" id="entry-date" class="form-control">
+
+            <label for="warehouse-name" class="form-label">Warehouse Name</label>
+            <input type="text" id="warehouse-name" class="form-control" placeholder="Enter warehouse name">
+
+            <label for="producer-id" class="form-label">Producer ID</label>
+            <input type="text" id="producer-id" class="form-control" placeholder="Fetched from Farmer Table" disabled>
+          </div>
+
+          <div class="col-md-12">
+            <label for="total-amount" class="form-label">Total Amount (Units)</label>
+            <input type="number" id="total-amount" class="form-control" placeholder="Enter total amount">
+
+            <label for="num-batches" class="form-label">Number of Batches</label>
+            <input type="number" id="num-batches" class="form-control" placeholder="Enter number of batches">
+
+            <label for="price-unit" class="form-label">Price Per Unit (Tk)</label>
+            <input type="number" id="price-unit" class="form-control" placeholder="Enter price per unit">
+
+            <label for="min-limit" class="form-label">Minimum Purchase Limit</label>
+            <input type="number" id="min-limit" class="form-control" placeholder="Enter minimum purchase limit">
+          </div>
+
+          <div class="col-md-12 text-end">
+            <button type="button" class="btn btn-success mt-3" id="save-product">Save Product</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Product Table -->
+      <h3>Current Products</h3>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Picture</th>
+            <th>Name</th>
+            <th>Product ID</th>
+            <th>Batch No</th>
+            <th>Shelf Life</th>
+            <th>Opt. Temp</th>
+            <th>Opt. Humidity</th>
+            <th>Date Entered</th>
+            <th>Warehouse</th>
+            <th>Producer ID</th>
+            <th>Total Amount</th>
+            <th>Batches</th>
+            <th>Price/Unit</th>
+            <th>Min Limit</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="product-table">
+          <!-- Dynamically filled rows -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const farmerTableData = {
+      "Product 1": {
+        batchNumber: "B001",
+        shelfLife: "10 days",
+        temperatureRange: "Min 0°C, Max 10°C",
+        humidityRange: "Min 30%, Max 50%",
+      },
+      "Product 2": {
+        batchNumber: "B002",
+        shelfLife: "7 days",
+        temperatureRange: "Min 2°C, Max 8°C",
+        humidityRange: "Min 40%, Max 60%",
+      },
+      "Product 3": {
+        batchNumber: "B003",
+        shelfLife: "15 days",
+        temperatureRange: "Min 1°C, Max 5°C",
+        humidityRange: "Min 35%, Max 55%",
+      },
+    };
+
+    const productNameField = document.getElementById("product-name");
+    const batchNumberField = document.getElementById("batch-number");
+    const shelfLifeField = document.getElementById("shelf-life");
+    const temperatureRangeField = document.getElementById("opt-temp");
+    const humidityRangeField = document.getElementById("opt-humidity");
+
+    // Populate Product Dropdown
+    Object.keys(farmerTableData).forEach((product) => {
+      const option = document.createElement("option");
+      option.value = product;
+      option.textContent = product;
+      productNameField.appendChild(option);
+    });
+
+    // Handle Product Selection
+    productNameField.addEventListener("change", () => {
+      const selectedProduct = productNameField.value;
+      if (farmerTableData[selectedProduct]) {
+        const { batchNumber, shelfLife, temperatureRange, humidityRange } =
+          farmerTableData[selectedProduct];
+        batchNumberField.value = batchNumber;
+        shelfLifeField.value = shelfLife;
+        temperatureRangeField.value = temperatureRange;
+        humidityRangeField.value = humidityRange;
+      } else {
+        batchNumberField.value = "";
+        shelfLifeField.value = "";
+        temperatureRangeField.value = "";
+        humidityRangeField.value = "";
+      }
+    });
+
+    const productTable = document.getElementById('product-table');
+
+    // Save Product Button Functionality
+    document.getElementById('save-product').addEventListener('click', () => {
+      const productName = productNameField.value;
+      const productPic = document.getElementById('product-pic').files[0]?.name || 'default.png';
+      const productId = Date.now(); // Temporary auto-generated ID
+      const batchNumber = batchNumberField.value;
+      const shelfLife = shelfLifeField.value;
+      const optTemp = temperatureRangeField.value;
+      const optHumidity = humidityRangeField.value;
+      const entryDate = document.getElementById('entry-date').value;
+      const warehouseName = document.getElementById('warehouse-name').value;
+      const producerId = "Fetched from Farmer Table"; // Placeholder
+      const totalAmount = document.getElementById('total-amount').value;
+      const numBatches = document.getElementById('num-batches').value;
+      const priceUnit = document.getElementById('price-unit').value;
+      const minLimit = document.getElementById('min-limit').value;
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td><img src="${productPic}" alt="${productName}" style="height: 50px;"></td>
+        <td>${productName}</td>
+        <td>${productId}</td>
+        <td>${batchNumber}</td>
+        <td>${shelfLife}</td>
+        <td>${optTemp}</td>
+        <td>${optHumidity}</td>
+        <td>${entryDate}</td>
+        <td>${warehouseName}</td>
+        <td>${producerId}</td>
+        <td>${totalAmount}</td>
+        <td>${numBatches}</td>
+        <td>${priceUnit}</td>
+        <td>${minLimit}</td>
+        <td>
+          <button class="btn btn-sm btn-success">Edit</button>
+          <button class="btn btn-sm btn-danger">Delete</button>
+        </td>
+      `;
+      productTable.appendChild(row);
+
+      // Reset Form
+      document.getElementById('add-product-form').reset();
+      batchNumberField.value = "";
+      shelfLifeField.value = "";
+      temperatureRangeField.value = "";
+      humidityRangeField.value = "";
+    });
+  </script>
+</body>
+</html>
