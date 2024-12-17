@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)file:///C:/Users/simon/Downloads/dbms/Transportation.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transportation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+        .scene-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            margin-right: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #640a0a;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        .button-group {
+            margin-top: 20px;
+            text-align: right;
+        }
+        button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: green;
+            color: white;
+            border: none;
+        }
+        button:hover {
+            background-color: darkgreen;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="scene-title">Transportation</div>
+        
+        <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date">
+        </div>
+
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <select id="location" name="location" onchange="filterTable()">
+                <option value="">Select a location</option>
+                <option value="Barguna">Barguna</option>
+                <option value="Barishal">Barishal</option>
+                <option value="Bhola">Bhola</option>
+                <option value="Jhalokati">Jhalokati</option>
+                <option value="Patuakhali">Patuakhali</option>
+                <option value="Pirojpur">Pirojpur</option>
+                <option value="Bandarban">Bandarban</option>
+                <option value="Brahmanbaria">Brahmanbaria</option>
+                <option value="Chandpur">Chandpur</option>
+                <option value="Chattogram">Chattogram</option>
+                <option value="Cox&#39;s Bazar">Cox's Bazar</option>
+                <option value="Feni">Feni</option>
+                <option value="Khagrachari">Khagrachari</option>
+                <option value="Lakshmipur">Lakshmipur</option>
+                <option value="Noakhali">Noakhali</option>
+                <option value="Rangamati">Rangamati</option>
+                <option value="Dhaka">Dhaka</option>
+                <option value="Faridpur">Faridpur</option>
+                <option value="Gazipur">Gazipur</option>
+                <option value="Gopalganj">Gopalganj</option>
+                <option value="Kishoreganj">Kishoreganj</option>
+                <option value="Madaripur">Madaripur</option>
+                <option value="Manikganj">Manikganj</option>
+                <option value="Munshiganj">Munshiganj</option>
+                <option value="Narayanganj">Narayanganj</option>
+                <option value="Narsingdi">Narsingdi</option>
+                <option value="Rajbari">Rajbari</option>
+                <option value="Shariatpur">Shariatpur</option>
+                <option value="Tangail">Tangail</option>
+                <option value="Bagerhat">Bagerhat</option>
+                <option value="Chuadanga">Chuadanga</option>
+                <option value="Jashore">Jashore</option>
+                <option value="Jhenaidah">Jhenaidah</option>
+                <option value="Khulna">Khulna</option>
+                <option value="Kushtia">Kushtia</option>
+                <option value="Magura">Magura</option>
+                <option value="Meherpur">Meherpur</option>
+                <option value="Narail">Narail</option>
+                <option value="Satkhira">Satkhira</option>
+                <option value="Mymensingh">Mymensingh</option>
+                <option value="Netrokona">Netrokona</option>
+                <option value="Sherpur">Sherpur</option>
+                <option value="Jamalpur">Jamalpur</option>
+                <option value="Bogura">Bogura</option>
+                <option value="Joypurhat">Joypurhat</option>
+                <option value="Naogaon">Naogaon</option>
+                <option value="Natore">Natore</option>
+                <option value="Chapainawabganj">Chapainawabganj</option>
+                <option value="Pabna">Pabna</option>
+                <option value="Rajshahi">Rajshahi</option>
+                <option value="Sirajganj">Sirajganj</option>
+                <option value="Dinajpur">Dinajpur</option>
+                <option value="Gaibandha">Gaibandha</option>
+                <option value="Kurigram">Kurigram</option>
+                <option value="Lalmonirhat">Lalmonirhat</option>
+                <option value="Nilphamari">Nilphamari</option>
+                <option value="Panchagarh">Panchagarh</option>
+                <option value="Rangpur">Rangpur</option>
+                <option value="Thakurgaon">Thakurgaon</option>
+                <option value="Habiganj">Habiganj</option>
+                <option value="Moulvibazar">Moulvibazar</option>
+                <option value="Sunamganj">Sunamganj</option>
+                <option value="Sylhet">Sylhet</option>
+            </select>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Shipment ID</th>
+                    <th>Delivery Man ID</th>
+                    <th>Vehicle ID</th>
+                    <th>Pick-Up Location</th>
+                    <th>Delivery Location</th>
+                    <th>Departure Time</th>
+                    <th>Delivery Time</th>
+                    <th>Product Type</th>
+                    <th>Quantity (Kg)</th>
+                    <th>Temperature</th>
+                    <th>Humidity</th>
+                    <th>Transportation Status</th>
+                </tr>
+            </thead>
+            <tbody id="shipmentTable">
+                <tr>
+                    <td contenteditable="true">0000000001</td>
+                    <td contenteditable="true">D123</td>
+                    <td contenteditable="true">V456</td>
+                    <td contenteditable="true">Warehouse A</td>
+                    <td contenteditable="true">Dhaka</td>
+                    <td contenteditable="true">08:00 AM</td>
+                    <td contenteditable="true">12:00 PM</td>
+                    <td contenteditable="true">Dairy</td>
+                    <td contenteditable="true">500</td>
+                    <td contenteditable="true">22°C</td>
+                    <td contenteditable="true">60%</td>
+                    <td contenteditable="true">In Transit</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">0000000002</td>
+                    <td contenteditable="true">D124</td>
+                    <td contenteditable="true">V457</td>
+                    <td contenteditable="true">Warehouse B</td>
+                    <td contenteditable="true">Barishal</td>
+                    <td contenteditable="true">09:00 AM</td>
+                    <td contenteditable="true">01:00 PM</td>
+                    <td contenteditable="true">Vegetables</td>
+                    <td contenteditable="true">750</td>
+                    <td contenteditable="true">24°C</td>
+                    <td contenteditable="true">58%</td>
+                    <td contenteditable="true">Delivered</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">0000000003</td>
+                    <td contenteditable="true">D125</td>
+                    <td contenteditable="true">V458</td>
+                    <td contenteditable="true">Warehouse C</td>
+                    <td contenteditable="true">Sylhet</td>
+                    <td contenteditable="true">10:00 AM</td>
+                    <td contenteditable="true">02:00 PM</td>
+                    <td contenteditable="true">Dairy</td>
+                    <td contenteditable="true">200</td>
+                    <td contenteditable="true">20°C</td>
+                    <td contenteditable="true">65%</td>
+                    <td contenteditable="true">Delivered</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">0000000004</td>
+                    <td contenteditable="true">D126</td>
+                    <td contenteditable="true">V459</td>
+                    <td contenteditable="true">Warehouse D</td>
+                    <td contenteditable="true">Rajshahi</td>
+                    <td contenteditable="true">11:00 AM</td>
+                    <td contenteditable="true">03:00 PM</td>
+                    <td contenteditable="true">Vegetables</td>
+                    <td contenteditable="true">150</td>
+                    <td contenteditable="true">23°C</td>
+                    <td contenteditable="true">62%</td>
+                    <td contenteditable="true">In Transit</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">0000000005</td>
+                    <td contenteditable="true">D127</td>
+                    <td contenteditable="true">V460</td>
+                    <td contenteditable="true">Warehouse E</td>
+                    <td contenteditable="true">Chattogram</td>
+                    <td contenteditable="true">07:00 AM</td>
+                    <td contenteditable="true">11:00 AM</td>
+                    <td contenteditable="true">Dairy</td>
+                    <td contenteditable="true">200</td>
+                    <td contenteditable="true">25°C</td>
+                    <td contenteditable="true">55%</td>
+                    <td contenteditable="true">Delivered</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">0000000006</td>
+                    <td contenteditable="true">D128</td>
+                    <td contenteditable="true">V461</td>
+                    <td contenteditable="true">Warehouse F</td>
+                    <td contenteditable="true">Khulna</td>
+                    <td contenteditable="true">06:00 AM</td>
+                    <td contenteditable="true">10:00 AM</td>
+                    <td contenteditable="true">Dairy</td>
+                    <td contenteditable="true">300</td>
+                    <td contenteditable="true">26°C</td>
+                    <td contenteditable="true">59%</td>
+                    <td contenteditable="true">In Transit</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">0000000007</td>
+                    <td contenteditable="true">D129</td>
+                    <td contenteditable="true">V462</td>
+                    <td contenteditable="true">Warehouse G</td>
+                    <td contenteditable="true">Rangpur</td>
+                    <td contenteditable="true">05:00 AM</td>
+                    <td contenteditable="true">09:00 AM</td>
+                    <td contenteditable="true">Meat</td>
+                    <td contenteditable="true">400</td>
+                    <td contenteditable="true">18°C</td>
+                    <td contenteditable="true">57%</td>
+                    <td contenteditable="true">In Transit</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">0000000008</td>
+                    <td contenteditable="true">D130</td>
+                    <td contenteditable="true">V463</td>
+                    <td contenteditable="true">Warehouse H</td>
+                    <td contenteditable="true">Mymensingh</td>
+                    <td contenteditable="true">04:00 AM</td>
+                    <td contenteditable="true">08:00 AM</td>
+                    <td contenteditable="true">Vegetables</td>
+                    <td contenteditable="true">500</td>
+                    <td contenteditable="true">21°C</td>
+                    <td contenteditable="true">61%</td>
+                    <td contenteditable="true">Delivered</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">0000000009</td>
+                    <td contenteditable="true">D131</td>
+                    <td contenteditable="true">V464</td>
+                    <td contenteditable="true">Warehouse I</td>
+                    <td contenteditable="true">Patuakhali</td>
+                    <td contenteditable="true">03:00 AM</td>
+                    <td contenteditable="true">07:00 AM</td>
+                    <td contenteditable="true">Dairy</td>
+                    <td contenteditable="true">600</td>
+                    <td contenteditable="true">19°C</td>
+                    <td contenteditable="true">63%</td>
+                    <td contenteditable="true">In Transit</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">0000000010</td>
+                    <td contenteditable="true">D132</td>
+                    <td contenteditable="true">V465</td>
+                    <td contenteditable="true">Warehouse J</td>
+                    <td contenteditable="true">Comilla</td>
+                    <td contenteditable="true">02:00 AM</td>
+                    <td contenteditable="true">06:00 AM</td>
+                    <td contenteditable="true">Vegetables</td>
+                    <td contenteditable="true">700</td>
+                    <td contenteditable="true">24°C</td>
+                    <td contenteditable="true">56%</td>
+                    <td contenteditable="true">Delivered</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="button-group">
+            
+            <button type="submit">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        function editTable() {
+            alert('Edit functionality can be implemented here.');
+        }
+    </script>
+
+
+</body></html>
