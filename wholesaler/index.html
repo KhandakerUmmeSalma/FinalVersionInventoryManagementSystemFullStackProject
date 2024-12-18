@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://kit.fontawesome.com/a028686634.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <title>  <form method="POST">
+                                        <div class="d-flex align-items-center mb-3 pb-1">
+                                            <i class="fa-solid fa-warehouse fa-2x me-3 icon-color"></i>
+                                            <span class="h1 fw-bold mb-0">FreshPick</span>
+                                        </div>
+</title>
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .custom-offcanvas {
+      width: 250px;
+    }
+
+    .card img {
+      object-fit: cover;
+      width: 100%;
+      height: 200px;
+    }
+
+    .cart-value {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+    <!-- Navbar -->
+<nav class="navbar fixed-top" style="background-color: #B6F2D1;">
+  <div class="container-fluid">
+    <!-- Company Logo and Name -->
+    <form method="POST" class="d-flex align-items-center">
+      <i class="fa-solid fa-warehouse fa-2x me-2"></i>
+      <span class="h1 fw-bold mb-0">FreshPick</span>
+    </form>
+
+    <!-- Navbar Brand -->
+   
+    <!-- Navbar Toggler for Offcanvas -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Offcanvas Menu -->
+    <div class="offcanvas offcanvas-end custom-offcanvas" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasMenuLabel">Filter</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <!-- Add Dropdown Items Here -->
+          </li>
+        </ul>
+
+        <!-- Cart Button -->
+        <div class="mt-3">
+          <a href="cart.html" class="btn btn-primary w-100">
+            <i class="fa-solid fa-cart-shopping"></i> Cart
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+  <!-- Main Content -->
+  <div class="container mt-5 pt-5">
+  <div class="row">
+    <!-- Card 1 -->
+    <div class="col-md-4 mb-4 d-flex">
+      <div class="card w-100">
+        <img src="image/Vegetable.jpeg" class="card-img-top" alt="Vegetables">
+        <div class="card-body">
+          <h5 class="card-title">Vegetables</h5>
+          <p class="card-text">Fresh vegetables for your table.</p>
+          <button class="btn btn-primary" onclick="window.location.href='vegetable.html'">View Vegetables</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="col-md-4 mb-4 d-flex">
+      <div class="card w-100">
+        <img src="image/Dairy.jpg" class="card-img-top" alt="Dairy Products">
+        <div class="card-body">
+          <h5 class="card-title">Dairy</h5>
+          <p class="card-text">High-quality dairy products.</p>
+          <button class="btn btn-primary" onclick="window.location.href='dairy.html'">View Dairy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="col-md-4 mb-4 d-flex">
+      <div class="card w-100">
+        <img src="image/Meat.jpeg" class="card-img-top" alt="Meat Products">
+        <div class="card-body">
+          <h5 class="card-title">Meat</h5>
+          <p class="card-text">Premium-quality meats.</p>
+          <button class="btn btn-primary" onclick="window.location.href='meat.html'">View Meat</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Initialize cart total
+    let cartTotal = 0;
+
+    // Add event listener to Add-to-Cart buttons
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+      button.addEventListener('click', () => {
+        const productPrice = parseFloat(button.getAttribute('data-price')) || 0;
+        cartTotal += productPrice;
+
+        // Update cart total in the navbar
+        document.getElementById('cartTotal').textContent = cartTotal.toFixed(2);
+
+        alert(`Item added to cart! Current Total: ৳${cartTotal.toFixed(2)}`);
+      });
+    });
+  </script>
+</body>
+</html>

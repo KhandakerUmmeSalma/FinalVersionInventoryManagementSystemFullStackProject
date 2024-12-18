@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <script src="https://kit.fontawesome.com/a028686634.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .navbar {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar fixed-top" style="background-color: #B6F2D1;">
+    <div class="container-fluid">
+      <!-- Company Logo and Name -->
+      <form method="POST" class="d-flex align-items-center">
+        <i class="fa-solid fa-warehouse fa-2x me-2"></i>
+        <span class="h1 fw-bold mb-0">FreshPick</span>
+      </form>
+    </div>
+  </nav>
+
+  <!-- Cart Content -->
+  <div id="cartContainer" class="container mt-5 pt-5">
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+
+    <!-- Cart Total -->
+    <div class="d-flex justify-content-between mt-4">
+      <h4>Total: Taka <span id="cartTotal">0.00</span></h4>
+      <h4>Discount: <span id="discountPercent">0%</span> (Taka <span id="discountAmount">0.00</span>)</h4>
+    </div>
+
+    <!-- Payment Method Selection -->
+    <div class="mt-4">
+      <h4>Select Payment Method</h4>
+      <select class="form-select" id="paymentmethod">
+        <option value="" selected disabled>Choose Payment Method</option>
+        <option value="bkash">Bkash</option>
+        <option value="nogod">Nogod</option>
+        <option value="cod">Cash On Delivery</option>
+        <option value="card">Card</option>
+      </select>
+    </div>
+
+    <!-- Address Input -->
+    <div class="mt-4">
+      <h4>Enter Address</h4>
+      <textarea class="form-control" id="customerAddress" rows="3" placeholder="Enter your address here..."></textarea>
+    </div>
+
+    <!-- Checkout Button -->
+    <div class="mt-4">
+      <button class="btn btn-success w-100" id="checkoutButton" disabled>Proceed to Checkout</button>
+    </div>
+  </div>
+
+  <script>
+    // Constants for discount thresholds based on total amount
+    const discountRanges = [
+      { min: 20000, max: 30000, discount: 0.08 }, // 8% for total > 20,000 and <= 30,000
+      { min: 30001, max: 60000, discount: 0.12 }, // 12% for total > 30,000 and <= 60,000
+      { min: 60001, discount: 0.30 },            // 30% for total > 60,000
+    ];
+
+    const maxDiscount = 0.24; // Maximum discount cap for totals <= 60,000
+
+    // Retrieve cart data or initialize an empty cart
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Function to calculate discount based on total amount
+    function calculateDiscount(totalPrice) {
+      let discount = 0;
+      for (let range of discountRanges) {
+        if (totalPrice >= range.min && (!range.max || totalPrice <= range.max)) {
+          discount = range.discount;
+        }
+      }
+      return totalPrice > 60000 ? discount : Math.min(discount, maxDiscount); // Apply respective cap
+    }
+
+    // Update the cart and discount display
+    function updateCartDisplay() {
+      const cartItemsContainer = document.getElementById('cartItems');
+      const cartTotal = document.getElementById('cartTotal');
+      const discountPercent = document.getElementById('discountPercent');
+      const discountAmount = document.getElementById('discountAmount');
+
+      cartItemsContainer.innerHTML = '';
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+        cartTotal.innerText = '0.00';
+        discountPercent.innerText = '0%';
+        discountAmount.innerText = '0.00';
+        document.getElementById('checkoutButton').disabled = true;
+        return;
+      }
+
+      let totalPrice = 0;
+
+      cart.forEach((item, index) => {
+        const itemRow = document.createElement('div');
+        itemRow.classList.add('cart-item', 'd-flex', 'justify-content-between', 'align-items-center');
+        itemRow.innerHTML = `
+          <div>
+            <strong>${item.product}</strong> - Taka ${item.price} x 
+            <input type="number" value="${item.quantity}" min="1" class="form-control d-inline-block" style="width: 60px;">
+          </div>
+          <button class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
+        `;
+
+        // Update quantity event
+        itemRow.querySelector('input').addEventListener('change', function (e) {
+          item.quantity = parseInt(e.target.value);
+          updateCart();
+        });
+
+        // Remove item event
+        itemRow.querySelector('button').addEventListener('click', function () {
+          cart.splice(index, 1);
+          updateCart();
+        });
+
+        cartItemsContainer.appendChild(itemRow);
+        totalPrice += item.price * item.quantity;
+      });
+
+      // Apply discount based on total price
+      const discount = calculateDiscount(totalPrice);
+      const discountAmountValue = totalPrice * discount;
+
+      discountPercent.innerText = `${(discount * 100).toFixed(0)}%`;
+      discountAmount.innerText = discountAmountValue.toFixed(2);
+
+      const finalTotal = totalPrice - discountAmountValue;
+      cartTotal.innerText = finalTotal.toFixed(2);
+      document.getElementById('checkoutButton').disabled = false;
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      // Store discount data for profile page
+      localStorage.setItem('discountSaved', discountAmountValue.toFixed(2));
+      localStorage.setItem('totalSavedPercent', (discount * 100).toFixed(0));
+    }
+
+    function updateCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartDisplay();
+    }
+
+    document.getElementById('checkoutButton').addEventListener('click', () => {
+      const paymentMethod = document.getElementById('paymentmethod').value;
+      const customerAddress = document.getElementById('customerAddress').value.trim();
+
+      if (!paymentMethod || !customerAddress) {
+        alert('Please select a payment method and enter your address.');
+        return;
+      }
+
+      const orderId = Math.floor(1000000000 + Math.random() * 9000000000);
+      const finalTotal = document.getElementById('cartTotal').innerText;
+
+      localStorage.setItem('orderDetails', JSON.stringify({
+        orderId,
+        totalAmount: finalTotal,
+        address: customerAddress,
+      }));
+
+      window.location.href = 'orderConfirmation.html';
+    });
+
+    updateCartDisplay();
+  </script>
+</body>
+</html>
