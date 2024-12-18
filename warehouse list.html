@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .dashboard {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .dashboard h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .search-bar button {
+            padding: 10px 15px;
+            background-color: #15e631;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-bar button:hover {
+            background-color: #39f321;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <h1>List of Warehouses</h1>
+    
+    <div class="search-bar">
+        <input type="text" id="searchCity" placeholder="Search by City">
+        <input type="text" id="searchWarehouse" placeholder="Search by Warehouse Name">
+        <button onclick="filterTable()">Search</button>
+    </div>
+
+    <table id="warehouseTable">
+        <thead>
+            <tr>
+                <th>Warehouse ID</th>
+                <th>Warehouse Name</th>
+                <th>City</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>101</td>
+                <td>Central Warehouse</td>
+                <td>Dhaka</td>
+            </tr>
+            <tr>
+                    <td>102</td>
+                    <td>Fatin's Warehouse</td>
+                    <td>Dhaka</td>
+            </tr>
+            <tr>
+                <td>103</td>
+                <td>West Side Storage</td>
+                <td>Cottogram</td>
+            </tr>
+            <tr>
+                <td>104</td>
+                <td>North Supply Depot</td>
+                <td>Rangpur</td>
+            </tr>
+            <tr>
+                <td>105</td>
+                <td>East Coast Hub</td>
+                <td>Rajshahi</td>
+            </tr>
+            <tr>
+                <td>106</td>
+                <td>Moynamoti Limited</td>
+                <td>Cumilla</td>
+            </tr>
+            <tr>
+                <td>107</td>
+                <td>Padma Warehouse</td>
+                <td>Faridpur</td>
+            </tr>
+            <tr>
+                <td>108</td>
+                <td>Mango Warehouse</td>
+                <td>Dinajpur</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function filterTable() {
+        const cityFilter = document.getElementById('searchCity').value.toLowerCase();
+        const warehouseFilter = document.getElementById('searchWarehouse').value.toLowerCase();
+        const table = document.getElementById('warehouseTable');
+        const rows = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < rows.length; i++) {
+            const city = rows[i].cells[2].textContent.toLowerCase();
+            const warehouseName = rows[i].cells[1].textContent.toLowerCase();
+
+            if (city.includes(cityFilter) && warehouseName.includes(warehouseFilter)) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
